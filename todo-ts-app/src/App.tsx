@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskItem from './components/TaskItem';
 import { Task, TaskStatus } from './types/Task';
+import { loadTasksFromStorage, saveTasksToStorage } from './utils/storage';
 import { v4 as uuidv4 } from 'uuid';
 
 const App: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => loadTasksFromStorage());
   const [newTask, setNewTask] = useState('');
+  const [newDescription, setNewDescription] = useState('');
   const [status, setStatus] = useState<TaskStatus>('todo');
+
+  useEffect(() => {
+    saveTasksToStorage(tasks);
+  }, [tasks]);
+
 
   const handleAddTask = () => {
     if (!newTask.trim()) return;
+    if (!newDescription.trim()) return;
+
 
     const task: Task = {
       id: uuidv4(),
       title: newTask,
+      description: newDescription,
       status: status,
     };
 
     setTasks(prev => [task, ...prev]);
     setNewTask('');
+    setNewDescription('')
     setStatus('todo');
   };
 
@@ -32,6 +43,13 @@ const App: React.FC = () => {
           value={newTask}
           onChange={e => setNewTask(e.target.value)}
           placeholder="Task name"
+          className="border px-3 py-2 mr-2 rounded"
+        />
+        <input
+          type="text"
+          value={newDescription}
+          onChange={e => setNewDescription(e.target.value)}
+          placeholder="Description"
           className="border px-3 py-2 mr-2 rounded"
         />
         <select

@@ -8,7 +8,8 @@ interface TaskItemProps {
 const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   return (
     <div className="border p-3 rounded mb-2 bg-white shadow-sm">
-      <h3 className="font-semibold">{task.title}</h3>
+      <h2 className="font-semibold">{task.title}</h2>
+      <h4 className="font-semibold">{task.description}</h4>
       <p className="text-sm text-gray-600">Status: {task.status}</p>
     </div>
   );

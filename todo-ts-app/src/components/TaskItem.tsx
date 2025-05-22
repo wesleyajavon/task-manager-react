@@ -67,9 +67,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEditTitle, onEditDescriptio
             <option value="in-progress">In Progress</option>
             <option value="done">Done</option>
           </select>
-        ) : null}
+        ) : <p className="text-sm text-gray-600">Status: {task.status}</p>
+        }
 
-        <p className="text-sm text-gray-600">Status: {task.status}</p>
       </div>
       <div className="flex gap-2">
         {isEditing ? (

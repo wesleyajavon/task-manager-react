@@ -57,57 +57,61 @@ const App: React.FC = () => {
 
 
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">To-Do App (TypeScript)</h1>
 
-      <div className="mb-4">
-        <input
-          type="text"
-          value={newTask}
-          onChange={e => setNewTask(e.target.value)}
-          placeholder="Task name"
-          className="border px-3 py-2 mr-2 rounded"
-        />
-        <input
-          type="text"
-          value={newDescription}
-          onChange={e => setNewDescription(e.target.value)}
-          placeholder="Description"
-          className="border px-3 py-2 mr-2 rounded"
-        />
-        <select
-          value={status}
-          onChange={e => setStatus(e.target.value as TaskStatus)}
-          className="border px-2 py-2 mr-2 rounded"
-        >
-          <option value="todo">To Do</option>
-          <option value="in-progress">In Progress</option>
-          <option value="done">Done</option>
-        </select>
-        <button
-          onClick={handleAddTask}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Add
-        </button>
-      </div>
+    <div className="min-h-screen bg-gray-100 py-10 px-4">
+      <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-md">
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">To-Do App (TypeScript)</h1>
 
-      {tasks.length === 0 ? (
-        <p className="text-gray-500">No tasks yet.</p>
-      ) : (
-        tasks.map(task => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            onEditTitle={handleEditTask}
-            onEditDescription={handleEditTaskDescription}
-            onEditStatus={handleEditTaskStatus}
-            onDelete={handleDeleteTask}
+        <div className="mb-4">
+          <input
+            type="text"
+            value={newTask}
+            onChange={e => setNewTask(e.target.value)}
+            placeholder="Task name"
+            className="border px-3 py-2 mr-2 rounded"
           />
-        ))
-      )}
+          <input
+            type="text"
+            value={newDescription}
+            onChange={e => setNewDescription(e.target.value)}
+            placeholder="Description"
+            className="border px-3 py-2 mr-2 rounded"
+          />
+          <select
+            value={status}
+            onChange={e => setStatus(e.target.value as TaskStatus)}
+            className="border px-2 py-2 mr-2 rounded"
+          >
+            <option value="todo">To Do</option>
+            <option value="in-progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+          <button
+            onClick={handleAddTask}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Add
+          </button>
+        </div>
 
+        {tasks.length === 0 ? (
+          <p className="text-gray-500">No tasks yet.</p>
+        ) : (
+          tasks.map(task => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onEditTitle={handleEditTask}
+              onEditDescription={handleEditTaskDescription}
+              onEditStatus={handleEditTaskStatus}
+              onDelete={handleDeleteTask}
+            />
+          ))
+        )}
+
+      </div>
     </div>
+
   );
 };
 

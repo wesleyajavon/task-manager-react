@@ -33,6 +33,29 @@ const App: React.FC = () => {
     setStatus('todo');
   };
 
+  const handleEditTask = (id: string, newTitle: string) => {
+    setTasks(prev =>
+      prev.map(task => (task.id === id ? { ...task, title: newTitle } : task))
+    );
+  };
+
+  const handleEditTaskDescription = (id: string, newDescription: string) => {
+    setTasks(prev =>
+      prev.map(task => (task.id === id ? { ...task, description: newDescription } : task))
+    );
+  };
+
+  const handleEditTaskStatus = (id: string, newStatus: TaskStatus) => {
+    setTasks(prev =>
+      prev.map(task => (task.id === id ? { ...task, status: newStatus } : task))
+    );
+  };
+
+  const handleDeleteTask = (id: string) => {
+    setTasks(prev => prev.filter(task => task.id !== id));
+  };
+
+
   return (
     <div className="max-w-xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">To-Do App (TypeScript)</h1>
@@ -72,8 +95,18 @@ const App: React.FC = () => {
       {tasks.length === 0 ? (
         <p className="text-gray-500">No tasks yet.</p>
       ) : (
-        tasks.map(task => <TaskItem key={task.id} task={task} />)
+        tasks.map(task => (
+          <TaskItem
+            key={task.id}
+            task={task}
+            onEditTitle={handleEditTask}
+            onEditDescription={handleEditTaskDescription}
+            onEditStatus={handleEditTaskStatus}
+            onDelete={handleDeleteTask}
+          />
+        ))
       )}
+
     </div>
   );
 };

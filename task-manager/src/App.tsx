@@ -8,7 +8,11 @@ const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(() => loadTasksFromStorage());
   const [newTask, setNewTask] = useState('');
   const [newDescription, setNewDescription] = useState('');
-  const [status, setStatus] = useState<TaskStatus>('todo');
+  const [status, setStatus] = useState<TaskStatus>('To do');
+  const [filterStatus, setFilterStatus] = useState<"All" | TaskStatus>("All");
+
+  
+
 
   useEffect(() => {
     saveTasksToStorage(tasks);
@@ -30,7 +34,7 @@ const App: React.FC = () => {
     setTasks(prev => [task, ...prev]);
     setNewTask('');
     setNewDescription('')
-    setStatus('todo');
+    setStatus('To do');
   };
 
   const handleEditTask = (id: string, newTitle: string) => {
@@ -55,12 +59,31 @@ const App: React.FC = () => {
     setTasks(prev => prev.filter(task => task.id !== id));
   };
 
+  const filteredTasks = tasks.filter((task) => {
+  return filterStatus === "All" || task.status === filterStatus;
+});
+
+
 
   return (
 
     <div className="min-h-screen bg-gray-100 py-10 px-4">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-md">
-        <h1 className="text-3xl font-bold mb-6 text-center text-black-600">Task Manager 📝 (V1)</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-black-600">Task Manager 📝 (V2)</h1>
+
+
+        <div className="flex gap-2 my-4">
+          {["All", "To do", "In progress", "Done"].map((status) => (
+            <button
+              key={status}
+              onClick={() => setFilterStatus(status as typeof filterStatus)}
+              className={`px-3 py-1 rounded cursor-pointer ${filterStatus === status ? "bg-blue-500 text-white" : "bg-gray-200"
+                }`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
 
         <div className="mb-4">
           <input
@@ -82,13 +105,13 @@ const App: React.FC = () => {
             onChange={e => setStatus(e.target.value as TaskStatus)}
             className="border px-2 py-2 mr-2 rounded"
           >
-            <option value="todo">To Do</option>
-            <option value="in-progress">In Progress</option>
-            <option value="done">Done</option>
+            <option value="To do">To Do</option>
+            <option value="In progress">In Progress</option>
+            <option value="Done">Done</option>
           </select>
           <button
             onClick={handleAddTask}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
           >
             Add
           </button>
@@ -97,7 +120,7 @@ const App: React.FC = () => {
         {tasks.length === 0 ? (
           <p className="text-gray-500">No tasks yet.</p>
         ) : (
-          tasks.map(task => (
+          filteredTasks.map(task => (
             <TaskItem
               key={task.id}
               task={task}

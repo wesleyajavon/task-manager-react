@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TaskItem from './components/TaskItem';
-import { Task, TaskStatus } from './types/Task';
+import type { Task, TaskStatus } from './types/Task';
 import { loadTasksFromStorage, saveTasksToStorage } from './utils/storage';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -60,7 +60,7 @@ const App: React.FC = () => {
 
     <div className="min-h-screen bg-gray-100 py-10 px-4">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-md">
-        <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">To-Do App (TypeScript)</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Task Manager 📝(TypeScript)</h1>
 
         <div className="mb-4">
           <input

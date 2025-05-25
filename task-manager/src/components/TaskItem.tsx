@@ -44,7 +44,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEditTitle, onEditDescriptio
             className="border px-2 py-1 mr-2 rounded"
           />
         ) : (
-          <h2 className="font-semibold">{task.title}</h2>
+          <h1 className="font-bold">{task.title}</h1>
         )}
 
         {isEditing ? (
@@ -54,14 +54,14 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEditTitle, onEditDescriptio
             className="border px-2 py-1 mr-2 rounded"
           />
         ) : (
-          <h3 className="font-semibold">{task.description}</h3>
+          <h5>{task.description}</h5>
         )}
 
         {isEditing ? (
           <select
             value={editStatus}
             onChange={e => setEditStatus(e.target.value as TaskStatus)}
-            className="border px-2 py-2 mr-2 rounded"
+            className="border px-2 py-2 mr-2 mt-2 rounded"
           >
             <option value="todo">To Do</option>
             <option value="in-progress">In Progress</option>
@@ -73,12 +73,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEditTitle, onEditDescriptio
       </div>
       <div className="flex gap-2">
         {isEditing ? (
-          <button onClick={handleSave} className="text-green-600">Save</button>
+          <button onClick={handleSave} className="text-green-600 hover:bg-green-100 transition-all duration-200">Save</button>
         ) : (
-          <button onClick={() => setIsEditing(true)} className="text-blue-600">Edit</button>
+          <button onClick={() => setIsEditing(true)} className="text-blue-600 hover:bg-blue-100 transition-all duration-200">Edit</button>
         )}
 
-        <button onClick={() => onDelete(task.id)} className="text-red-600">Delete</button>
+        <button onClick={() => onDelete(task.id)} className="text-red-600 hover:bg-red-100 transition-all duration-200">Delete</button>
       </div>
     </div>
   );

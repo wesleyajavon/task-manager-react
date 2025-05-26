@@ -106,7 +106,7 @@ const App: React.FC = () => {
             className="border px-2 py-2 mr-2 rounded"
           >
             <option value="To do">To Do</option>
-            <option value="In progress">In Progress</option>
+            <option value="In progress">In progress</option>
             <option value="Done">Done</option>
           </select>
           <button

@@ -13,8 +13,8 @@ const App: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<"All" | TaskStatus>("All");
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      const res = await fetch(`${API_BASE_URL}/tasks`);
+    try {const fetchTasks = async () => {
+      const res = await fetch(`${API_BASE_URL}/api/tasks`);
       const data = await res.json();
       const normalized = data.map((task: any) => ({
         id: task._id,
@@ -25,12 +25,14 @@ const App: React.FC = () => {
       setTasks(normalized);
     };
 
-    fetchTasks();
+    fetchTasks();} catch(error) {
+      console.log(error)
+    }
   }, []);
 
   const updateTask = async (id: string, updates: Partial<Task>) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +55,7 @@ const App: React.FC = () => {
     if (!newTask.trim() || !newDescription.trim()) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/tasks`, {
+      const response = await fetch(`${API_BASE_URL}/api/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +96,7 @@ const App: React.FC = () => {
 
   const handleDeleteTask = async (id: string) => {
     try {
-      await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
         method: 'DELETE',
       });
       setTasks(prev => prev.filter(task => task._id !== id && task._id !== id));

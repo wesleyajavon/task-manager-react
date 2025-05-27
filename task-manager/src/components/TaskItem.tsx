@@ -19,17 +19,17 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEditTitle, onEditDescriptio
 
   const handleSave = () => {
     if (editTextTitle.trim()) {
-      onEditTitle(task.id, editTextTitle);
+      onEditTitle(task._id, editTextTitle);
       setIsEditing(false);
     }
 
     if (editTextDescription.trim()) {
-      onEditDescription(task.id, editTextDescription);
+      onEditDescription(task._id, editTextDescription);
       setIsEditing(false);
     }
 
     if (editStatus.trim()) {
-      onEditStatus(task.id, editStatus);
+      onEditStatus(task._id, editStatus);
       setIsEditing(false);
     }
   };
@@ -91,7 +91,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEditTitle, onEditDescriptio
           <button onClick={() => setIsEditing(true)} className="text-blue-600 shadow-md hover:bg-blue-100 transition-all duration-200 cursor-pointer focus:outline-none focus:ring">Edit</button>
         )}
 
-        <button onClick={() => onDelete(task.id)} className="text-red-600 shadow-md hover:bg-red-100 transition-all duration-200 cursor-pointer">Delete</button>
+        <button onClick={() => onDelete(task._id)} className="text-red-600 shadow-md hover:bg-red-100 transition-all duration-200 cursor-pointer">Delete</button>
       </div>
     </div>
   );

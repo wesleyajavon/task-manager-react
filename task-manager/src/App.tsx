@@ -1,67 +1,108 @@
 import React, { useState, useEffect } from 'react';
 import TaskItem from './components/TaskItem';
 import type { Task, TaskStatus } from './types/Task';
-import { loadTasksFromStorage, saveTasksToStorage } from './utils/storage';
-import { v4 as uuidv4 } from 'uuid';
 
 const App: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>(() => loadTasksFromStorage());
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [status, setStatus] = useState<TaskStatus>('To do');
   const [filterStatus, setFilterStatus] = useState<"All" | TaskStatus>("All");
 
-  
-
-
   useEffect(() => {
-    saveTasksToStorage(tasks);
-  }, [tasks]);
-
-
-  const handleAddTask = () => {
-    if (!newTask.trim()) return;
-    if (!newDescription.trim()) return;
-
-
-    const task: Task = {
-      id: uuidv4(),
-      title: newTask,
-      description: newDescription,
-      status: status,
+    const fetchTasks = async () => {
+      const res = await fetch('http://localhost:3001/api/tasks');
+      const data = await res.json();
+      const normalized = data.map((task: any) => ({
+        id: task._id,
+        title: task.title,
+        description: task.description,
+        status: task.status,
+      }));
+      setTasks(normalized);
     };
 
-    setTasks(prev => [task, ...prev]);
-    setNewTask('');
-    setNewDescription('')
-    setStatus('To do');
+    fetchTasks();
+  }, []);
+
+  const updateTask = async (id: string, updates: Partial<Task>) => {
+    try {
+      const res = await fetch(`http://localhost:3001/api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+      const updatedTask = await res.json();
+
+      setTasks(prev =>
+        prev.map(task =>
+          task._id === id || task._id === id ? { ...task, ...updatedTask } : task
+        )
+      );
+    } catch (err) {
+      console.error('Error updating task:', err);
+    }
+  };
+
+  const handleAddTask = async () => {
+    if (!newTask.trim() || !newDescription.trim()) return;
+
+    try {
+      const response = await fetch('http://localhost:3001/api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: newTask,
+          description: newDescription,
+          status: status,
+        }),
+      });
+
+      const savedTask = await response.json();
+
+
+      setTasks(prev => [savedTask, ...prev]);
+      setNewTask('');
+      setNewDescription('')
+      setStatus('To do');
+    } catch (error) {
+      console.error('Failed to add task:', error);
+
+    }
+
   };
 
   const handleEditTask = (id: string, newTitle: string) => {
-    setTasks(prev =>
-      prev.map(task => (task.id === id ? { ...task, title: newTitle } : task))
-    );
+    updateTask(id, { title: newTitle });
+
   };
 
   const handleEditTaskDescription = (id: string, newDescription: string) => {
-    setTasks(prev =>
-      prev.map(task => (task.id === id ? { ...task, description: newDescription } : task))
-    );
+    updateTask(id, { description: newDescription });
   };
 
   const handleEditTaskStatus = (id: string, newStatus: TaskStatus) => {
-    setTasks(prev =>
-      prev.map(task => (task.id === id ? { ...task, status: newStatus } : task))
-    );
+    updateTask(id, { status: newStatus });
   };
 
-  const handleDeleteTask = (id: string) => {
-    setTasks(prev => prev.filter(task => task.id !== id));
+  const handleDeleteTask = async (id: string) => {
+    try {
+      await fetch(`http://localhost:3001/api/tasks/${id}`, {
+        method: 'DELETE',
+      });
+      setTasks(prev => prev.filter(task => task._id !== id && task._id !== id));
+    } catch (err) {
+      console.error('Error deleting task:', err);
+    }
   };
 
   const filteredTasks = tasks.filter((task) => {
-  return filterStatus === "All" || task.status === filterStatus;
-});
+    return filterStatus === "All" || task.status === filterStatus;
+  });
 
 
 
@@ -69,7 +110,7 @@ const App: React.FC = () => {
 
     <div className="min-h-screen bg-gray-100 py-10 px-4">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-md">
-        <h1 className="text-3xl font-bold mb-6 text-center text-black-600">Task Manager 📝 (V2)</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-black-600">Task Manager 📝 (V3) - MongoDB</h1>
 
 
         <div className="flex gap-2 my-4">
@@ -122,7 +163,7 @@ const App: React.FC = () => {
         ) : (
           filteredTasks.map(task => (
             <TaskItem
-              key={task.id}
+              key={task._id}
               task={task}
               onEditTitle={handleEditTask}
               onEditDescription={handleEditTaskDescription}

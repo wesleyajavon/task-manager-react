@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import TaskItem from './components/TaskItem';
 import type { Task, TaskStatus } from './types/Task';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState('');
@@ -11,7 +14,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const res = await fetch('http://localhost:3001/api/tasks');
+      const res = await fetch(`${API_BASE_URL}/tasks`);
       const data = await res.json();
       const normalized = data.map((task: any) => ({
         id: task._id,
@@ -27,7 +30,7 @@ const App: React.FC = () => {
 
   const updateTask = async (id: string, updates: Partial<Task>) => {
     try {
-      const res = await fetch(`http://localhost:3001/api/tasks/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +53,7 @@ const App: React.FC = () => {
     if (!newTask.trim() || !newDescription.trim()) return;
 
     try {
-      const response = await fetch('http://localhost:3001/api/tasks', {
+      const response = await fetch(`${API_BASE_URL}/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +94,7 @@ const App: React.FC = () => {
 
   const handleDeleteTask = async (id: string) => {
     try {
-      await fetch(`http://localhost:3001/api/tasks/${id}`, {
+      await fetch(`${API_BASE_URL}/tasks/${id}`, {
         method: 'DELETE',
       });
       setTasks(prev => prev.filter(task => task._id !== id && task._id !== id));

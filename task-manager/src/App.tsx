@@ -99,7 +99,7 @@ const App: React.FC = () => {
       await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
         method: 'DELETE',
       });
-      setTasks(prev => prev.filter(task => task._id !== id && task._id !== id));
+      setTasks(prev => prev.filter(task => task._id !== id));
     } catch (err) {
       console.error('Error deleting task:', err);
     }

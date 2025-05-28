@@ -69,7 +69,7 @@ const App: React.FC = () => {
 
     <div className="min-h-screen bg-gray-100 py-10 px-4">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-md">
-        <h1 className="text-3xl font-bold mb-6 text-center text-black-600">Task Manager 📝 (V2)</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-black-600">Task Manager 📝</h1>
 
 
         <div className="flex gap-2 my-4">
